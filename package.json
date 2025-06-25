@@ -1,41 +1,7 @@
 {
-  "name": "dateparser",
-  "version": "1.0.0",
-  "description": "Natural language parser for scheduling phrases with iCalendar output",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "dev": "ts-node src/index.ts",
-    "test": "jest",
-    "lint": "eslint src/**/*.ts",
-    "format": "prettier --write src/**/*.ts"
-  },
-  "keywords": [
-    "natural-language",
-    "date-parser",
-    "icalendar",
-    "scheduling",
-    "chrono"
-  ],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
-    "chrono-node": "^2.7.0",
-    "ical-generator": "^5.0.0",
-    "moment": "^2.29.4",
-    "moment-timezone": "^0.5.43"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.5.0",
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.0.0",
-    "jest": "^29.5.0",
-    "prettier": "^3.0.0",
-    "ts-jest": "^29.1.0",
-    "ts-node": "^10.9.0",
-    "typescript": "^5.0.0"
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3"
   }
-} 
+}
