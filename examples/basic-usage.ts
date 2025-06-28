@@ -22,7 +22,7 @@ examples.forEach((example, index) => {
   
   console.log("Parsed Components:");
   details.components.forEach(component => {
-    console.log(`  - ${component.type}: "${component.text}" (confidence: ${component.confidence})`);
+    console.log(`  - ${component.type}: "${component.components.map(c => c.text).join(', ')}" (confidence: ${component.components.map(c => c.confidence).join(', ')})`);
   });
   
   // Convert to iCalendar format

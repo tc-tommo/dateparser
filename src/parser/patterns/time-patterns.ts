@@ -4,7 +4,7 @@ import { Pattern, ParsedComponent, ComponentType, ParsingContext } from '../type
 export const timePatterns: Pattern[] = [
   {
     name: "12-hour format with meridiem",
-    regex: /\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/i,
+    regex: /\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/gi,
     confidence: 0.95,
     priority: 1,
     parse: (match, context) => {
@@ -30,7 +30,7 @@ export const timePatterns: Pattern[] = [
   
   {
     name: "24-hour format",
-    regex: /\b(\d{1,2}):(\d{2})\b/,
+    regex: /\b(\d{1,2}):(\d{2})\b/g,
     confidence: 0.9,
     priority: 2,
     parse: (match, context) => {
@@ -54,7 +54,7 @@ export const timePatterns: Pattern[] = [
   
   {
     name: "Military time",
-    regex: /\b(\d{4})\b/,
+    regex: /\b(\d{4})\b/g,
     confidence: 0.85,
     priority: 3,
     parse: (match, context) => {
@@ -79,7 +79,7 @@ export const timePatterns: Pattern[] = [
   
   {
     name: "Fuzzy time expressions",
-    regex: /\b(noon|midnight|morning|afternoon|evening|night)\b/i,
+    regex: /\b(noon|midnight|morning|afternoon|evening|night)\b/gi,
     confidence: 0.7,
     priority: 4,
     parse: (match, context) => {

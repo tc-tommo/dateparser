@@ -3,7 +3,7 @@ import { Pattern, ParsedComponent, ComponentType, ParsingContext } from '../type
 export const datePatterns: Pattern[] = [
   {
     name: "Weekday abbreviations",
-    regex: /\b(mon|tue|tues|wed|thu|thurs|fri|sat|sun)\b/i,
+    regex: /\b(mon|tue|tues|wed|thu|thurs|fri|sat|sun)\b/gi,
     confidence: 0.9,
     priority: 1,
     parse: (match, context) => {
@@ -28,7 +28,7 @@ export const datePatterns: Pattern[] = [
   
   {
     name: "Relative dates - tomorrow",
-    regex: /\b(tomorrow|tom|tmr|tmrw)\b/i,
+    regex: /\b(tomorrow|tom|tmr|tmrw)\b/gi,
     confidence: 0.95,
     priority: 1,
     parse: (match, context) => {
@@ -49,7 +49,7 @@ export const datePatterns: Pattern[] = [
   
   {
     name: "Relative dates - in X days",
-    regex: /\bin\s+(\d+)\s+days?\b/i,
+    regex: /\bin\s+(\d+)\s+days?\b/gi,
     confidence: 0.9,
     priority: 2,
     parse: (match, context) => {
@@ -71,7 +71,7 @@ export const datePatterns: Pattern[] = [
   
   {
     name: "Next weekday",
-    regex: /\bnext\s+(mon|tue|tues|wed|thu|thurs|fri|sat|sun)\b/i,
+    regex: /\bnext\s+(mon|tue|tues|wed|thu|thurs|fri|sat|sun)\b/gi,
     confidence: 0.9,
     priority: 2,
     parse: (match, context) => {
@@ -103,7 +103,7 @@ export const datePatterns: Pattern[] = [
   
   {
     name: "Month names",
-    regex: /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b/i,
+    regex: /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b/gi,
     confidence: 0.9,
     priority: 3,
     parse: (match, context) => {
@@ -127,7 +127,7 @@ export const datePatterns: Pattern[] = [
   
   {
     name: "Date with month and day",
-    regex: /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})(?:st|nd|rd|th)?\b/i,
+    regex: /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})(?:st|nd|rd|th)?\b/gi,
     confidence: 0.85,
     priority: 4,
     parse: (match, context) => {

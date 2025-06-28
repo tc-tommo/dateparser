@@ -45,11 +45,10 @@ export class DateParser {
     
     return {
       originalText: text,
-      components: parsedPhrase.components,
-      timeComponents: this.parser.getComponentsByType(parsedPhrase, ComponentType.TIME),
-      dateComponents: this.parser.getComponentsByType(parsedPhrase, ComponentType.DATE),
-      weekdayComponents: this.parser.getComponentsByType(parsedPhrase, ComponentType.WEEKDAY),
-      recurrenceComponents: this.parser.getComponentsByType(parsedPhrase, ComponentType.RECURRENCE),
+      components: Object.values(ComponentType).reduce((acc, type) => {
+        acc[type] = this.parser.getComponentsByType(parsedPhrase, type);
+        return acc;
+      }, {} as Record<ComponentType, any[]>),
       validation: this.parser.validatePhrase(parsedPhrase)
     };
   }

@@ -3,7 +3,7 @@ import { Pattern, ParsedComponent, ComponentType, ParsingContext } from '../type
 export const recurrencePatterns: Pattern[] = [
   {
     name: "Every weekday",
-    regex: /\bevery\s+(mon|tue|tues|wed|thu|thurs|fri|sat|sun)\b/i,
+    regex: /\bevery\s+(mon|tue|tues|wed|thu|thurs|fri|sat|sun)\b/gi,
     confidence: 0.9,
     priority: 1,
     parse: (match, context) => {
@@ -32,7 +32,7 @@ export const recurrencePatterns: Pattern[] = [
   
   {
     name: "Every other pattern",
-    regex: /\bevery\s+other\s+(mon|tue|tues|wed|thu|thurs|fri|sat|sun)\b/i,
+    regex: /\bevery\s+other\s+(mon|tue|tues|wed|thu|thurs|fri|sat|sun)\b/gi,
     confidence: 0.9,
     priority: 2,
     parse: (match, context) => {
@@ -61,7 +61,7 @@ export const recurrencePatterns: Pattern[] = [
   
   {
     name: "Daily frequency",
-    regex: /\b(daily|every\s+day)\b/i,
+    regex: /\b(daily|every\s+day)\b/gi,
     confidence: 0.95,
     priority: 1,
     parse: (match, context) => {
@@ -82,7 +82,7 @@ export const recurrencePatterns: Pattern[] = [
   
   {
     name: "Weekly frequency",
-    regex: /\b(weekly|every\s+week)\b/i,
+    regex: /\b(weekly|every\s+week)\b/gi,
     confidence: 0.95,
     priority: 1,
     parse: (match, context) => {
@@ -103,7 +103,7 @@ export const recurrencePatterns: Pattern[] = [
   
   {
     name: "Monthly frequency",
-    regex: /\b(monthly|every\s+month)\b/i,
+    regex: /\b(monthly|every\s+month)\b/gi,
     confidence: 0.95,
     priority: 1,
     parse: (match, context) => {
@@ -124,7 +124,7 @@ export const recurrencePatterns: Pattern[] = [
   
   {
     name: "Multiple weekdays",
-    regex: /\b(mon|tue|tues|wed|thu|thurs|fri|sat|sun)(?:\s*,\s*(mon|tue|tues|wed|thu|thurs|fri|sat|sun))+\b/i,
+    regex: /\b(mon|tue|tues|wed|thu|thurs|fri|sat|sun)(?:\s*,\s*(mon|tue|tues|wed|thu|thurs|fri|sat|sun))+\b/gi,
     confidence: 0.8,
     priority: 3,
     parse: (match, context) => {
