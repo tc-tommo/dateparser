@@ -21,10 +21,9 @@ examples.forEach((example, index) => {
   const details = dateParser.getParsingDetails(example);
   
   console.log("Parsed Components:");
-  details.components.forEach(component => {
-    console.log(`  - ${component.type}: "${component.components.map(c => c.text).join(', ')}" (confidence: ${component.components.map(c => c.confidence).join(', ')})`);
-  });
-  
+  Object.values(details.components).flat().forEach(component => {
+    console.log(`  - ${component.type}: "${component.text}" (confidence: ${component.confidence})`);
+  }); 
   // Convert to iCalendar format
   const result = dateParser.parseToCalendar(example);
   
