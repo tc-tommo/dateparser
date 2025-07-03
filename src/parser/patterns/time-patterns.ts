@@ -6,7 +6,7 @@ export const timePatterns: Pattern[] = [
     name: "12-hour format with meridiem",
     regex: /\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/gi,
     confidence: 0.95,
-    priority: 1,
+    priority: 0,
     parse: (match, context) => {
       const hour = parseInt(match[1]);
       const minute = match[2] ? parseInt(match[2]) : 0;
@@ -32,7 +32,7 @@ export const timePatterns: Pattern[] = [
     name: "24-hour format",
     regex: /\b(\d{1,2}):(\d{2})\b/g,
     confidence: 0.9,
-    priority: 2,
+    priority: 0,
     parse: (match, context) => {
       const hour = parseInt(match[1]);
       const minute = parseInt(match[2]);
@@ -56,7 +56,7 @@ export const timePatterns: Pattern[] = [
     name: "Military time",
     regex: /\b(\d{4})\b/g,
     confidence: 0.85,
-    priority: 3,
+    priority: 0,
     parse: (match, context) => {
       const timeStr = match[1];
       const hour = parseInt(timeStr.substring(0, 2));
@@ -81,7 +81,7 @@ export const timePatterns: Pattern[] = [
     name: "Fuzzy time expressions",
     regex: /\b(noon|midnight|morning|afternoon|evening|night)\b/gi,
     confidence: 0.7,
-    priority: 4,
+    priority: 0,
     parse: (match, context) => {
       const timeStr = match[1].toLowerCase();
       let hour = 12;
@@ -119,4 +119,4 @@ export const timePatterns: Pattern[] = [
       };
     }
   }
-]; 
+];

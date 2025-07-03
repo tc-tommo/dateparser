@@ -109,6 +109,7 @@ export class iCalendarGenerator {
 
   private extractStartDateTime(phrase: ParsedPhrase): Date | null {
     const timeComponent = this.parser.getBestComponent(phrase, ComponentType.TIME);
+    const intervalComponent = this.parser.getBestComponent(phrase, ComponentType.INTERVAL);
     const dateComponent = this.parser.getBestComponent(phrase, ComponentType.DATE);
     const weekdayComponent = this.parser.getBestComponent(phrase, ComponentType.WEEKDAY);
     
@@ -134,8 +135,17 @@ export class iCalendarGenerator {
       targetDate.setDate(targetDate.getDate() + daysToAdd);
     }
     
-    // Apply time component
-    if (timeComponent) {
+    // Apply time component (prioritize INTERVAL start time over individual TIME)
+    if (intervalComponent && intervalComponent.value.start) {
+      if (intervalComponent.value.start.hour !== undefined) {
+        targetDate.setHours(intervalComponent.value.start.hour);
+      }
+      if (intervalComponent.value.start.minute !== undefined) {
+        targetDate.setMinutes(intervalComponent.value.start.minute);
+      }
+      targetDate.setSeconds(0);
+      targetDate.setMilliseconds(0);
+    } else if (timeComponent) {
       if (timeComponent.value.hour !== undefined) {
         targetDate.setHours(timeComponent.value.hour);
       }
@@ -150,15 +160,18 @@ export class iCalendarGenerator {
   }
 
   private extractEndDateTime(phrase: ParsedPhrase): Date | null {
-    // Look for interval patterns like "from 2pm to 4pm"
-    const intervalPattern = /\bfrom\s+([^to]+)\s+to\s+([^,\n]+)/i;
-    const match = phrase.originalText.match(intervalPattern);
-    
-    if (match) {
-      const endTimeText = match[2].trim();
-      const endPhrase = this.parser.parse(endTimeText);
-      const endTime = this.extractStartDateTime(endPhrase);
-      return endTime;
+    // First check for INTERVAL component (time ranges like "4pm to 8pm")
+    const intervalComponent = this.parser.getBestComponent(phrase, ComponentType.INTERVAL);
+    if (intervalComponent && intervalComponent.value.end) {
+      const startDate = this.extractStartDateTime(phrase);
+      if (startDate) {
+        const endDate = new Date(startDate);
+        endDate.setHours(intervalComponent.value.end.hour);
+        endDate.setMinutes(intervalComponent.value.end.minute);
+        endDate.setSeconds(0);
+        endDate.setMilliseconds(0);
+        return endDate;
+      }
     }
     
     return null;

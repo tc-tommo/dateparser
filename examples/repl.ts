@@ -1,5 +1,3 @@
-#!/usr/bin/env ts-node
-
 import * as readline from 'readline';
 import { DateParser } from '../src/index';
 import { ParserConfig } from '../src/parser/types';

@@ -9,6 +9,7 @@ import {
 import { timePatterns } from './patterns/time-patterns';
 import { datePatterns } from './patterns/date-patterns';
 import { recurrencePatterns } from './patterns/recurrence-patterns';
+import { intervalPatterns } from './patterns/interval-patterns';
 
 export class NaturalLanguageParser {
   private patterns: Pattern[];
@@ -20,6 +21,7 @@ export class NaturalLanguageParser {
       ...timePatterns,
       ...datePatterns,
       ...recurrencePatterns,
+      ...intervalPatterns,
       ...(config.patterns || [])
     ].sort((a, b) => b.priority - a.priority);
 
@@ -34,71 +36,71 @@ export class NaturalLanguageParser {
   /**
    * Parse a natural language phrase into structured components
    */
-  parse(text: string): ParsedPhrase {
-    const components: ParsedComponent[] = [];
-    let remainingText = text;
-    let currentIndex = 0;
-
-    // First pass: extract all possible components
-    const allMatches: Array<{
-      component: ParsedComponent;
-      pattern: Pattern;
-      match: RegExpMatchArray;
-    }> = [];
-
-    for (const pattern of this.patterns) {
-      const matches = Array.from(
-        remainingText.matchAll(pattern.regex)
-      );
-
-      for (const match of matches) {
-        const component = pattern.parse(match, this.context);
-        if (component) {
-          allMatches.push({
-            component: {
-              ...component,
-              startIndex: currentIndex + match.index!,
-              endIndex: currentIndex + match.index! + match[0].length
-            },
-            pattern,
-            match
-          });
+    /**
+   * Parse a natural language phrase into structured components
+   */
+    parse(text: string): ParsedPhrase {
+      const components: ParsedComponent[] = [];
+      let remainingText = text;
+      let currentIndex = 0;
+  
+      // First pass: extract all possible components
+      const allMatches: Array<{
+        component: ParsedComponent;
+        pattern: Pattern;
+        match: RegExpMatchArray;
+      }> = [];
+  
+      for (const pattern of this.patterns) {
+        const matches = Array.from(
+          remainingText.matchAll(pattern.regex)
+        );
+  
+        for (const match of matches) {
+          const component = pattern.parse(match, this.context);
+          if (component) {
+            allMatches.push({
+              component: {
+                ...component,
+                startIndex: currentIndex + match.index!,
+                endIndex: currentIndex + match.index! + match[0].length
+              },
+              pattern,
+              match
+            });
+          }
         }
       }
-    }
-
-    // Sort matches by confidence and position
-    allMatches.sort((a, b) => {
-      if (Math.abs(a.component.confidence - b.component.confidence) > 0.1) {
-        return b.component.confidence - a.component.confidence;
-      }
-      return a.component.startIndex - b.component.startIndex;
-    });
-
-    // Second pass: resolve conflicts and build final component list
-    const usedRanges: Array<[number, number]> = [];
-    
-    for (const { component } of allMatches) {
-      // Check if this component overlaps with already used ranges
-      const overlaps = usedRanges.some(([start, end]) => 
-        (component.startIndex < end && component.endIndex > start)
-      );
-      
-      if (!overlaps) {
+  
+      // Sort matches by priority (highest first), then confidence, then position
+      allMatches.sort((a, b) => {
+        // First sort by pattern priority (highest first)
+        if (a.pattern.priority !== b.pattern.priority) {
+          return b.pattern.priority - a.pattern.priority;
+        }
+        // Then by confidence (highest first)
+        if (Math.abs(a.component.confidence - b.component.confidence) > 0.1) {
+          return b.component.confidence - a.component.confidence;
+        }
+        // Finally by position in text (earliest first)
+        return a.component.startIndex - b.component.startIndex;
+      });
+  
+      // Second pass: include all matches, allowing overlaps
+      // The component selection logic will handle multiple matches of the same type
+      for (const { component } of allMatches) {
         components.push(component);
-        usedRanges.push([component.startIndex, component.endIndex]);
       }
+  
+      // Sort components by position in text for final output
+      components.sort((a, b) => a.startIndex - b.startIndex);
+  
+      return {
+        originalText: text,
+        components,
+        referenceDate: this.context.referenceDate
+      };
     }
-
-    // Sort components by position in text
-    components.sort((a, b) => a.startIndex - b.startIndex);
-
-    return {
-      originalText: text,
-      components,
-      referenceDate: this.context.referenceDate
-    };
-  }
 
   /**
    * Extract specific component types from parsed phrase
